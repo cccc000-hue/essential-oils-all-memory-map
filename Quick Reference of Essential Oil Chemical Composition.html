@@ -31,7 +31,22 @@
 
     <!-- Header & Search -->
     <div class="sticky top-0 z-50 bg-white shadow-md p-4">
-        <h1 class="text-xl font-bold text-gray-800 mb-3 text-center">🌿 精油化學成分速查</h1>
+        <!-- [新功能] 頂部導航列：包含返回按鈕與標題 -->
+        <div class="flex items-center justify-between mb-3 relative">
+            <!-- 返回主頁按鈕 -->
+            <a href="index.html" class="flex items-center gap-1 text-gray-500 hover:text-green-600 hover:bg-green-50 px-3 py-2 rounded-lg transition-all duration-200 group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="text-sm font-bold hidden sm:inline">返回目錄</span>
+            </a>
+
+            <!-- 標題 (使用 absolute centering 或 flex-grow 確保置中) -->
+            <h1 class="text-xl font-bold text-gray-800 text-center flex-grow pr-12">
+                🌿 精油化學成分速查
+            </h1>
+        </div>
+        
         
         <!-- Search Bar -->
         <div class="relative max-w-lg mx-auto mb-3">
