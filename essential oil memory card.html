@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>精油記憶卡</title>
+    <title>精油資料庫</title>
     <style>
         :root {
             --primary: #10b981;
@@ -22,20 +22,8 @@
             flex-direction: column;
             overflow: hidden;
         }
-        /* 錯誤訊息顯示區 */
-        #error-console {
-            display: none;
-            background: #ef4444;
-            color: white;
-            padding: 10px;
-            font-size: 12px;
-            white-space: pre-wrap;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 9999;
-        }
         
-        /* --- Header 修改區域 --- */
+        /* Header */
         header { 
             padding: 12px 16px; 
             background: var(--card-bg); 
@@ -44,10 +32,10 @@
             align-items: center; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
             z-index: 10; 
-            gap: 10px; /* 增加間距 */
+            gap: 10px;
+            flex-shrink: 0;
         }
 
-        /* 新增：左側容器，讓按鈕跟標題排在一起 */
         .header-left {
             display: flex;
             align-items: center;
@@ -55,23 +43,20 @@
             overflow: hidden;
         }
 
-        /* 新增：首頁按鈕樣式 */
         .home-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 36px;
             height: 36px;
-            background: #ecfdf5; /* 淺綠色背景 */
+            background: #ecfdf5;
             color: var(--primary);
             border-radius: 10px;
             text-decoration: none;
             flex-shrink: 0;
             transition: background 0.2s;
         }
-        .home-btn:active {
-            background-color: #d1fae5;
-        }
+        .home-btn:active { background-color: #d1fae5; }
 
         h1 { 
             font-size: 1.1rem; 
@@ -80,73 +65,113 @@
             overflow: hidden; 
             text-overflow: ellipsis; 
         }
-        /* --------------------- */
 
         .counter { background: #d1fae5; color: #059669; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
         
-        .search-container { padding: 10px 16px; background: var(--bg); z-index: 10; }
+        /* Search */
+        .search-container { padding: 10px 16px; background: var(--bg); z-index: 10; flex-shrink: 0; }
         .search-input-wrapper { position: relative; }
         .search-input { width: 100%; padding: 10px 40px 10px 16px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 1rem; outline: none; -webkit-appearance: none; }
         .clear-btn { position: absolute; right: 0; top: 0; height: 100%; width: 40px; background: none; border: none; font-size: 1.2rem; display: none; color: #94a3b8; }
         
-        .scene { flex: 1; margin: 0 16px 16px; perspective: 1000px; position: relative; }
-        .card { width: 100%; height: 100%; position: relative; transition: transform 0.6s; transform-style: preserve-3d; }
-        .card.is-flipped { transform: rotateY(180deg); }
+        /* Main Content Area */
+        .scene { 
+            flex: 1; 
+            margin: 0 16px 16px; 
+            position: relative; 
+            overflow: hidden; /* 確保內容在卡片內滾動 */
+            display: flex;
+            flex-direction: column;
+        }
         
-        .card__face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 24px; background: var(--card-bg); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .card__face--front { align-items: center; justify-content: center; padding: 32px; text-align: center; transform: rotateY(0deg); z-index: 2; }
-        .card__face--back { transform: rotateY(180deg); }
+        /* Card Design - No Flip */
+        .card { 
+            width: 100%; 
+            height: 100%; 
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+        }
         
-        .icon-circle { width: 80px; height: 80px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--primary); font-size: 2rem; }
-        .front-cn { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; line-height: 1.2; }
-        .front-en { font-size: 1rem; color: var(--text-sub); line-height: 1.4; }
-        .tap-hint { margin-top: 32px; font-size: 0.75rem; color: #94a3b8; background: #f8fafc; padding: 6px 16px; border-radius: 20px; }
+        /* Card Header Section (原本的正面資訊) */
+        .card-header {
+            padding: 24px 20px 16px;
+            text-align: center;
+            background: #fff;
+            border-bottom: 1px solid #f1f5f9;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-circle { 
+            width: 60px; 
+            height: 60px; 
+            background: #ecfdf5; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 12px; 
+            color: var(--primary); 
+            font-size: 1.8rem; 
+        }
         
-        .back-header { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; text-align: center; background: #fff; flex-shrink: 0; }
-        .back-header h3 { font-size: 1.1rem; margin-bottom: 2px; }
-        .back-header p { font-size: 0.8rem; color: var(--text-sub); }
+        .header-cn { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; line-height: 1.2; color: var(--text-main); }
+        .header-en { font-size: 0.95rem; color: var(--text-sub); line-height: 1.4; }
+
+        /* Card Body Section (原本的背面資訊) */
+        .card-body { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 20px; 
+            -webkit-overflow-scrolling: touch; 
+        }
         
-        .back-content { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
-        .info-block { margin-bottom: 16px; }
-        .label { font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
-        .value { font-size: 0.95rem; line-height: 1.6; white-space: pre-line; color: #334155; }
+        .info-block { margin-bottom: 20px; }
+        .label { font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
+        .label::before { content: ''; display: block; width: 4px; height: 12px; background: #cbd5e1; border-radius: 2px; }
+        .value { font-size: 1rem; line-height: 1.6; white-space: pre-line; color: #334155; }
         
-        .section-family { background: #f0fdf4; padding: 10px; border-radius: 8px; border: 1px solid #dcfce7; }
-        .section-contra { background: #fef2f2; padding: 12px; border-radius: 8px; border: 1px solid #fee2e2; }
+        /* Special Sections */
+        .section-family { background: #f0fdf4; padding: 12px; border-radius: 12px; border: 1px solid #dcfce7; }
+        .section-family .label::before { background: var(--primary); }
+        
+        .section-contra { background: #fef2f2; padding: 12px; border-radius: 12px; border: 1px solid #fee2e2; }
+        .section-contra .label { color: #b91c1c; }
+        .section-contra .label::before { background: #ef4444; }
         .value-contra { color: #b91c1c; font-weight: 500; }
         
-        .controls { padding: 0 16px 16px; display: flex; gap: 10px; z-index: 10; }
-        .btn { border: none; padding: 14px; border-radius: 14px; font-size: 1rem; font-weight: 600; flex: 1; cursor: pointer; transition: opacity 0.2s; -webkit-appearance: none; }
+        /* Controls */
+        .controls { padding: 0 16px 16px; display: flex; gap: 16px; z-index: 10; flex-shrink: 0; }
+        .btn { 
+            border: none; 
+            padding: 14px; 
+            border-radius: 14px; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            flex: 1; 
+            cursor: pointer; 
+            transition: opacity 0.2s; 
+            -webkit-appearance: none; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
         .btn:active { opacity: 0.8; }
-        .btn-nav { background: #fff; border: 1px solid #cbd5e1; color: var(--text-sub); }
-        .btn-flip { background: var(--primary); color: white; flex: 2; border: 1px solid var(--primary); }
+        .btn-nav { background: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); }
         
         .no-results { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-sub); }
     </style>
-    
-    <!-- 全局錯誤捕捉 -->
-    <script>
-        window.onerror = function(msg, url, line, col, error) {
-            var consoleDiv = document.getElementById('error-console');
-            if (consoleDiv) {
-                consoleDiv.style.display = 'block';
-                consoleDiv.innerText += "Error: " + msg + "\nLine: " + line + "\n";
-            }
-            try {
-                document.getElementById('frontCn').innerText = "程式發生錯誤";
-                document.getElementById('tapHint').innerText = "請截圖並回報錯誤代碼";
-            } catch(e){}
-            return false;
-        };
-    </script>
 </head>
 <body>
-    <div id="error-console"></div>
-
     <header>
-        <!-- 修改處：加入 header-left 包含按鈕與標題 -->
         <div class="header-left">
-            <!-- 返回主頁按鈕 (連結設為 index.html) -->
             <a href="index.html" class="home-btn" aria-label="返回主目錄">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -171,57 +196,54 @@
         </div>
 
         <div class="card" id="card">
-            <!-- 正面 -->
-            <div class="card__face card__face--front">
+            <!-- 上方標題區 -->
+            <div class="card-header">
                 <div class="icon-circle">🌿</div>
-                <div class="front-cn" id="frontCn">資料載入中...</div>
-                <div class="front-en" id="frontEn">Please wait</div>
-                <div class="tap-hint" id="tapHint">如果卡在此處，表示 JS 未執行</div>
+                <div class="header-cn" id="dispCn">資料載入中...</div>
+                <div class="header-en" id="dispEn">Please wait</div>
             </div>
 
-            <!-- 背面 -->
-            <div class="card__face card__face--back">
-                <div class="back-header">
-                    <h3 id="backCn"></h3>
-                    <p id="backEn"></p>
+            <!-- 下方內容區 -->
+            <div class="card-body" id="cardBody">
+                <div class="info-block section-family">
+                    <div class="label">科屬</div>
+                    <div class="value" id="valFamily"></div>
                 </div>
-                <div class="back-content">
-                    <div class="info-block section-family">
-                        <div class="label">科屬</div>
-                        <div class="value" id="valFamily"></div>
-                    </div>
-                    <div class="info-block">
-                        <div class="label">拉丁學名</div>
-                        <div class="value" id="valLatin"></div>
-                    </div>
-                    <div class="info-block">
-                        <div class="label">化學成份</div>
-                        <div class="value" id="valChem"></div>
-                    </div>
-                    <div class="info-block">
-                        <div class="label">功效</div>
-                        <div class="value" id="valProp"></div>
-                    </div>
-                    <div class="info-block section-contra">
-                        <div class="label" style="color:#b91c1c">禁忌</div>
-                        <div class="value value-contra" id="valContra"></div>
-                    </div>
+                <div class="info-block">
+                    <div class="label">拉丁學名</div>
+                    <div class="value" id="valLatin"></div>
+                </div>
+                <div class="info-block">
+                    <div class="label">化學成份</div>
+                    <div class="value" id="valChem"></div>
+                </div>
+                <div class="info-block">
+                    <div class="label">功效</div>
+                    <div class="value" id="valProp"></div>
+                </div>
+                <div class="info-block section-contra">
+                    <div class="label">禁忌</div>
+                    <div class="value value-contra" id="valContra"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="controls">
-        <button class="btn btn-nav" id="prevBtn">上一張</button>
-        <button class="btn btn-flip" id="flipBtn">查看答案</button>
-        <button class="btn btn-nav" id="nextBtn">下一張</button>
+        <button class="btn btn-nav" id="prevBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            上一張
+        </button>
+        <button class="btn btn-nav" id="nextBtn">
+            下一張
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
     </div>
 
     <script>
-        // 將主要邏輯包裝起來，避免全域變數污染
         document.addEventListener('DOMContentLoaded', function() {
             try {
-                // 定義資料庫 (確保字串內的換行符號使用 \n)
+                // 資料庫
                 var oilsData = [
                     { en: "Lemon-scented Eucalyptus", cn: "檸檬尤加利", latin: "Eucalyptus citriodora", family: "Myrtaceae 桃金孃科;\nCorymbia 傘房桉屬", prop: "- 止痛\n-肌肉關節僵硬; 修復韌帶\n- 消炎\n- 驅蟲\n- 抗真菌", chem: "醛類: 香茅醛 (Citronellal) <77%\n單萜醇類: 香茅醇 (Citronallol) 3.5%", contra: "容易致敏(皮膚)" },
                     { en: "Eucalyptus Blue Gum", cn: "藍膠尤加利", latin: "Eucalyptus globulus", family: "Myrtaceae 桃金孃科;\nEucalyptus 桉屬", prop: "-強效抗菌\n-對呼吸系統疾病有效\n-袪痰溶黏", chem: "氧化物類: 1,8 按油醇 (1,8 cineole) 75%\n單萜烯類: α松烯 (α-pinene) 10%\n酮類: 松香芹酮 (pinocarvone) 0.3%", contra: "-不適用於幼兒, 過量吸入會引致呼吸停頓\n-容易引起皮膚刺激\n- 對肝臟有神輕微毒性, 避免長期及大量使用\n-有神經毒性, 會引起癲癎, 不適宜6歲以下幼使用\n-影響藥物代謝, 不能口服" },
@@ -290,19 +312,17 @@
 
                 // --- 變數 ---
                 var currentIndex = 0;
-                var isFlipped = false;
                 var filteredData = oilsData.slice();
 
                 // --- 元素 ---
                 var card = document.getElementById('card');
+                var cardBody = document.getElementById('cardBody');
                 var prevBtn = document.getElementById('prevBtn');
                 var nextBtn = document.getElementById('nextBtn');
-                var flipBtn = document.getElementById('flipBtn');
                 var searchInput = document.getElementById('searchInput');
                 var clearBtn = document.getElementById('clearBtn');
                 var counter = document.getElementById('counter');
                 var noResults = document.getElementById('noResults');
-                var tapHint = document.getElementById('tapHint');
 
                 // --- 核心功能 ---
                 function renderCard() {
@@ -313,80 +333,35 @@
                         return;
                     }
 
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                     noResults.style.display = 'none';
                     
                     var data = filteredData[currentIndex];
                     counter.innerText = (currentIndex + 1) + " / " + filteredData.length;
 
-                    // 填充正面
-                    document.getElementById('frontCn').innerText = data.cn;
-                    document.getElementById('frontEn').innerText = data.en;
-                    if(tapHint) tapHint.innerText = "點擊翻看詳細資料";
-
-                    // 填充背面
-                    document.getElementById('backCn').innerText = data.cn;
-                    document.getElementById('backEn').innerText = data.en;
+                    // 填充內容
+                    document.getElementById('dispCn').innerText = data.cn;
+                    document.getElementById('dispEn').innerText = data.en;
                     document.getElementById('valFamily').innerText = data.family;
                     document.getElementById('valLatin').innerText = data.latin;
                     document.getElementById('valChem').innerText = data.chem;
                     document.getElementById('valProp').innerText = data.prop;
                     document.getElementById('valContra').innerText = data.contra;
-
-                    // 重置翻轉狀態
-                    if (isFlipped) {
-                        card.classList.remove('is-flipped');
-                        isFlipped = false;
-                        flipBtn.innerText = "查看答案";
-                        flipBtn.style.background = "var(--primary)";
-                        flipBtn.style.color = "white";
-                    }
-                }
-
-                function handleFlip() {
-                    if (filteredData.length === 0) return;
-                    isFlipped = !isFlipped;
-                    if (isFlipped) {
-                        card.classList.add('is-flipped');
-                        flipBtn.innerText = "返回";
-                        flipBtn.style.background = "#fff";
-                        flipBtn.style.color = "#334155";
-                    } else {
-                        card.classList.remove('is-flipped');
-                        flipBtn.innerText = "查看答案";
-                        flipBtn.style.background = "var(--primary)";
-                        flipBtn.style.color = "white";
-                    }
+                    
+                    // 每次切換時滾動回頂部
+                    if(cardBody) cardBody.scrollTop = 0;
                 }
 
                 function handleNext() {
                     currentIndex++;
                     if (currentIndex >= filteredData.length) currentIndex = 0;
-                    if(isFlipped) {
-                        card.classList.remove('is-flipped');
-                        isFlipped = false;
-                        flipBtn.innerText = "查看答案";
-                        flipBtn.style.background = "var(--primary)";
-                        flipBtn.style.color = "white";
-                        setTimeout(function(){ renderCard(); }, 200);
-                    } else {
-                        renderCard();
-                    }
+                    renderCard();
                 }
 
                 function handlePrev() {
                     currentIndex--;
                     if (currentIndex < 0) currentIndex = filteredData.length - 1;
-                    if(isFlipped) {
-                        card.classList.remove('is-flipped');
-                        isFlipped = false;
-                        flipBtn.innerText = "查看答案";
-                        flipBtn.style.background = "var(--primary)";
-                        flipBtn.style.color = "white";
-                        setTimeout(function(){ renderCard(); }, 200);
-                    } else {
-                        renderCard();
-                    }
+                    renderCard();
                 }
 
                 function handleSearch() {
@@ -396,14 +371,13 @@
                         filteredData = [];
                         for (var i = 0; i < oilsData.length; i++) {
                             var item = oilsData[i];
-                            // 擴展搜尋範圍：加入 prop (功效), chem (化學), family (科屬)
                             if (
                                 (item.cn && item.cn.indexOf(query) > -1) ||
                                 (item.en && item.en.toLowerCase().indexOf(query) > -1) ||
                                 (item.latin && item.latin.toLowerCase().indexOf(query) > -1) ||
-                                (item.prop && item.prop.toLowerCase().indexOf(query) > -1) || // 加入功效
-                                (item.chem && item.chem.toLowerCase().indexOf(query) > -1) || // 順便加入化學
-                                (item.family && item.family.toLowerCase().indexOf(query) > -1) // 順便加入科屬
+                                (item.prop && item.prop.toLowerCase().indexOf(query) > -1) ||
+                                (item.chem && item.chem.toLowerCase().indexOf(query) > -1) ||
+                                (item.family && item.family.toLowerCase().indexOf(query) > -1)
                             ) {
                                 filteredData.push(item);
                             }
@@ -422,8 +396,6 @@
                 }
 
                 // --- 綁定事件 ---
-                if (card) card.onclick = handleFlip;
-                if (flipBtn) flipBtn.onclick = handleFlip;
                 if (nextBtn) nextBtn.onclick = handleNext;
                 if (prevBtn) prevBtn.onclick = handlePrev;
                 if (searchInput) searchInput.oninput = handleSearch;
@@ -433,12 +405,6 @@
                 renderCard();
 
             } catch (err) {
-                // 嚴重錯誤處理
-                var consoleDiv = document.getElementById('error-console');
-                if(consoleDiv) {
-                    consoleDiv.style.display = 'block';
-                    consoleDiv.innerText += "CRITICAL JS ERROR: " + err.message;
-                }
                 alert("程式執行錯誤: " + err.message);
             }
         });
