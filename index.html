@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>精油溫習記憶重點 - 導航主頁</title>
+    <title>精油溫習 - 導航主頁</title>
     <!-- 引入 Tailwind CSS 讓樣式更美觀 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入 Google Fonts -->
@@ -23,9 +23,9 @@
         <div class="max-w-5xl mx-auto px-4 py-6 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">
-                    精油溫習記憶重點導航
+                    精油溫習導航
                 </h1>
-                <p class="text-sm text-gray-500 mt-1">所有精油溫習記憶重點(包括溫習重點及測試題庫)</p>
+                <p class="text-sm text-gray-500 mt-1">所有精油溫習資訊(包括溫習重點及測試題庫)</p>
             </div>
             <!-- Icon -->
             <div class="p-2 bg-green-50 rounded-full">
@@ -41,11 +41,17 @@
         
         <!-- 第一部分：記憶/溫習模式 -->
         <section>
-            <div class="flex items-center mb-6">
-                <div class="w-1 h-8 bg-green-500 rounded mr-3"></div>
-                <h2 class="text-xl font-bold text-gray-800">
-                    記憶/溫習模式
-                </h2>
+            <!-- 標題區塊修改：改用 items-start 並加入描述文字 -->
+            <div class="flex items-start mb-6">
+                <div class="w-1 h-8 bg-green-500 rounded mr-3 mt-1"></div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">
+                        記憶/溫習模式
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        包含所有精油、功能、化學成分及植物科屬等記憶圖。
+                    </p>
+                </div>
             </div>
             <div id="revision-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- JS 自動填充 -->
@@ -54,11 +60,17 @@
 
         <!-- 第二部分：考試答題模式 -->
         <section>
-            <div class="flex items-center mb-6">
-                <div class="w-1 h-8 bg-amber-500 rounded mr-3"></div>
-                <h2 class="text-xl font-bold text-gray-800">
-                    考試答題模式
-                </h2>
+            <!-- 標題區塊修改：改用 items-start 並加入描述文字 -->
+            <div class="flex items-start mb-6">
+                <div class="w-1 h-8 bg-amber-500 rounded mr-3 mt-1"></div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">
+                        答題模式
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        不同類型的測驗題庫（如拉丁學名背誦）
+                    </p>
+                </div>
             </div>
             <div id="exam-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- JS 自動填充 -->
@@ -99,7 +111,7 @@
             },
         ];
 
-        // 2. 考試答題模式的連結 (請在此處填入您的考試檔案名稱)
+        // 2. 考試答題模式的連結
         const examPages = [
             { 
                 file: 'essential oil latin name test.html', 
